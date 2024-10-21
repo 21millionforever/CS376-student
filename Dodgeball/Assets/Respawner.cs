@@ -18,4 +18,6 @@ public class Respawner : MonoBehaviour
         transform.position = SpawnUtilities.RandomFreePoint(FreeRadius);
         GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
     }
+
+    
 }
