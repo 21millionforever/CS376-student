@@ -190,28 +190,38 @@ namespace Assets.Serialization
             switch (o)
             {
                 case null:
-                    throw new NotImplementedException("Fill me in");
+                    // throw new NotImplementedException("Fill me in");
+                    Write("null");
                     break;
 
                 case int i:
-                    throw new NotImplementedException("Fill me in");
+                    Write(i.ToString());
                     break;
 
                 case float f:
-                    throw new NotImplementedException("Fill me in");
+                    // throw new NotImplementedException("Fill me in");
+                    Write(f.ToString());
                     break;
 
                 // Not: don't worry about handling strings that contain quote marks
                 case string s:
-                    throw new NotImplementedException("Fill me in");
+                    // throw new NotImplementedException("Fill me in");
+                    String new_s = "\"" + s + "\"";
+                    Write(new_s);
                     break;
 
                 case bool b:
-                    throw new NotImplementedException("Fill me in");
+                    // throw new NotImplementedException("Fill me in");
+                    if (b) {
+                        Write("True");
+                    } else {
+                        Write("False");
+                    }
                     break;
 
                 case IList list:
-                    throw new NotImplementedException("Fill me in");
+                    // throw new NotImplementedException("Fill me in11");
+                    WriteList(list);
                     break;
 
                 default:
@@ -231,7 +241,28 @@ namespace Assets.Serialization
         /// <param name="o">Object to serialize</param>
         private void WriteComplexObject(object o)
         {
-            throw new NotImplementedException("Fill me in");
+            // Get the ID for the object, and check if it's new
+            var (id, isNew) = GetId(o);
+            // If the object has already been serialized, just output its ID
+            if (!isNew)
+            {
+                Write($"#{id}");
+                return;
+            }
+            // Start the serialization of the new object
+            Write($"#{id}{{");
+            WriteField("type", o.GetType().Name, true);
+
+            // Use reflection to get all fields of the object
+            var fields = o.GetType().GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            foreach (var field in fields)
+            {
+                var fieldValue = field.GetValue(o);
+                WriteField(field.Name, fieldValue, false);
+            }
+
+            Write("}");
+            // throw new NotImplementedException("Fill me in");
         }
     }
 }

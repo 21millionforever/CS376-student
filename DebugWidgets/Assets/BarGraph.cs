@@ -47,6 +47,7 @@ public class BarGraph : MonoBehaviour
     void Start()
     {
         // TODO: Set the text to the name of this game object
+        Text.text = gameObject.name;
         
         
         // This sets width to the width of the widget on screen
@@ -129,10 +130,16 @@ public class BarGraph : MonoBehaviour
     public static BarGraph Find(string name, Vector2 position, float min, float max)
     {
         // TODO: Check if we've already made a bargraph of this name.  If so, return it.
+        if (BarGraphTable.ContainsKey(name))
+        {
+            return BarGraphTable[name];
+        }
         
         //
         // Otherwise, we need to make a new one
         //
+        
+        
 
         // The UI system requires that all UI widgets be inside of the GameObject that has the Canvas component.
         // So find the canvas component
